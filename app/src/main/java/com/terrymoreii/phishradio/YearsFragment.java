@@ -45,6 +45,7 @@ public class YearsFragment extends Fragment {
                 R.layout.list_item_years, R.id.list_item_years_textview, years);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_years);
+
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){

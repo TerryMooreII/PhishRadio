@@ -9,8 +9,8 @@ public class Show {
     public String date;
     public String venueName;
     public String location;
-    public String soundboard;
-    public String remastered;
+    public boolean soundboard;
+    public boolean remastered;
     public int duration;
 
     public Show (int id, String date, String venueName, String location){
@@ -52,19 +52,19 @@ public class Show {
         this.location = location;
     }
 
-    public String getSoundboard() {
+    public boolean getSoundboard() {
         return soundboard;
     }
 
-    public void setSoundboard(String soundboard) {
+    public void setSoundboard(boolean soundboard) {
         this.soundboard = soundboard;
     }
 
-    public String getRemastered() {
+    public boolean getRemastered() {
         return remastered;
     }
 
-    public void setRemastered(String remastered) {
+    public void setRemastered(boolean remastered) {
         this.remastered = remastered;
     }
 

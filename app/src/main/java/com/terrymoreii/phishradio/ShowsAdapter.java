@@ -38,4 +38,5 @@ public class ShowsAdapter extends ArrayAdapter<Show> {
         // Return the completed view to render on screen
         return convertView;
     }
+
 }

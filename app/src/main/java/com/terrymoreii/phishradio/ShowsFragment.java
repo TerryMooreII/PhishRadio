@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +51,7 @@ public class ShowsFragment extends Fragment {
         String year = "2014";
 
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-
-            year = intent.getStringExtra(Intent.EXTRA_TEXT);
+             year = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
 
         Toast.makeText(getActivity(), "Call service to get list for year: " + year, Toast.LENGTH_SHORT).show();
@@ -60,10 +60,7 @@ public class ShowsFragment extends Fragment {
 
 
         List<Show> shows = new ArrayList<Show>();
-        shows.add(new Show(1, "date", "venue", "location"));
-
-//        adapter = new ArrayAdapter<Show>(getActivity(),
-//                R.layout.list_item_shows, R.id.list_item_shows_textview, shows);
+        shows.add(new Show(1, "", "", ""));
 
         showsAdapter = new ShowsAdapter(getActivity(), shows);
 
@@ -73,11 +70,10 @@ public class ShowsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String show = showsAdapter.getItem(position).toString();
-                Toast.makeText(getActivity(), show, Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getActivity(), ShowsActivity.class)
-//                        .putExtra(Intent.EXTRA_TEXT, year);
-//                startActivity(intent);
+                Show show = showsAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), ShowDetailsActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, show.getId());
+                startActivity(intent);
             }
         });
 
@@ -90,9 +86,14 @@ public class ShowsFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Show> shows) {
             super.onPostExecute(shows);
+
             if (shows != null) {
+                showsAdapter.clear();
                 showsAdapter.addAll(shows);
                 showsAdapter.notifyDataSetChanged();
+            }else{
+                Toast.makeText(showsAdapter.getContext(), "Unable to fetch shows from the service.", Toast.LENGTH_LONG).show();
+
             }
 
         }
@@ -112,12 +113,17 @@ public class ShowsFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                URL url = new URL("http://phish.in/api/v1/years/" + year);
+                URL url = new URL("http://phish.in/api/v1/years/" + year + ".json");
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
+                urlConnection.setDoOutput(false);
+                urlConnection.setRequestProperty("Accept", "application/json");
+
                 urlConnection.connect();
+
+                Log.d(LOG_TAG, "Response Code: " + urlConnection.getResponseCode());
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
@@ -144,8 +150,14 @@ public class ShowsFragment extends Fragment {
                 Log.d("Terr", JsonStr);
                 return parseShows(JsonStr);
 
-            } catch (IOException e) {
+            }catch (SocketTimeoutException se){
+                Log.e(LOG_TAG, "SocketTimeoutException", se);
+                return null;
+            }
+            catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
+                Log.e(LOG_TAG, "IO Exception");
+
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
                 return null;

@@ -27,6 +27,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.terrymoreii.phishradio.MyActivity" />
         </activity>
+        <activity
+            android:name=".ShowDetailsActivity"
+            android:label="@string/title_activity_show_details"
+            android:parentActivityName=".MyActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.terrymoreii.phishradio.ShowsActivity" />
+        </activity>
     </application>
 
 </manifest>
