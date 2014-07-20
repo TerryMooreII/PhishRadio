@@ -35,6 +35,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.terrymoreii.phishradio.ShowsActivity" />
         </activity>
+
+        <service
+            android:name=".ShowPlayer"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
