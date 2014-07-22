@@ -41,6 +41,16 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name=".NowPlayingActivity"
+            android:label="@string/title_activity_now_playing" >
+        </activity>
+
+        <service
+            android:name=".service.ShowDetailsService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
