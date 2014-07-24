@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:minHeight="?android:attr/listPreferredItemHeight"
-android:gravity="center_vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:gravity="center_vertical"
     >
 
     <TextView
@@ -17,6 +17,6 @@ android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Venue"
-        android:layout_marginLeft="20pt"/>
+        android:layout_marginLeft="40pt"/>
 
-</LinearLayout>
+</RelativeLayout>

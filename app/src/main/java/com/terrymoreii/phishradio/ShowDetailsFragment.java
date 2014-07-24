@@ -68,22 +68,14 @@ public class ShowDetailsFragment extends Fragment {
 
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             id = intent.getIntExtra(Intent.EXTRA_TEXT, 3);
-
         }
-        Toast.makeText(getActivity(), "Display show with  " + id, Toast.LENGTH_SHORT).show();
-
 
         Intent showDetailsService = new Intent(getActivity(), ShowDetailsService.class)
                 .putExtra(ShowDetailsService.SHOW_ID, id + "");
         getActivity().startService(showDetailsService);
 
-
         List<Track> tracks = new ArrayList<Track>();
         Track track = new Track();
-        track.setTitle("");
-        track.setDuration(0);
-        tracks.add(track);
-
 
         tracksAdapter = new TracksAdapter(getActivity(), tracks);
 
@@ -91,7 +83,6 @@ public class ShowDetailsFragment extends Fragment {
 
         if (tracksAdapter != null)
             listView.setAdapter(tracksAdapter);
-
 
         //Receiver for the broadcast.
         IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);

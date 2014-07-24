@@ -54,13 +54,10 @@ public class ShowsFragment extends Fragment {
              year = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
 
-        Toast.makeText(getActivity(), "Call service to get list for year: " + year, Toast.LENGTH_SHORT).show();
         FetchShowsTask fetchShowsTask = new FetchShowsTask();
         fetchShowsTask.execute(year);
 
-
         List<Show> shows = new ArrayList<Show>();
-        shows.add(new Show(1, "", "", ""));
 
         showsAdapter = new ShowsAdapter(getActivity(), shows);
 

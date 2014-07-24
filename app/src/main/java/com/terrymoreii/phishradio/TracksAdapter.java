@@ -9,6 +9,7 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.terrymoreii.phishradio.Utils.TimeUtils;
 import com.terrymoreii.phishradio.model.Show;
 import com.terrymoreii.phishradio.model.Track;
 
@@ -37,16 +38,18 @@ public class TracksAdapter extends ArrayAdapter<Track> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_tracks, parent, false);
         }
+
         // Lookup view for data population
         TextView tvTitle = (TextView) convertView.findViewById(R.id.list_item_track_title);
+        TextView tvId = (TextView) convertView.findViewById(R.id.list_item_track_number);
         TextView tvDuration = (TextView) convertView.findViewById(R.id.list_item_track_time);
+
         // Populate the data into the template view using the data object
         tvTitle.setText(track.getTitle());
-        tvDuration.setText(track.getDuration()+"");
-//        // Return the completed view to render on screen
+        tvDuration.setText(TimeUtils.getTime(track.getDuration()));
+        tvId.setText(track.getPosition() + ".");
+
+
         return convertView;
     }
-
-
-
 }

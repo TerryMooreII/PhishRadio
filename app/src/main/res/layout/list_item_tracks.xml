@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical">
 
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_item_track_number"
+        android:text="Id" >
+    </TextView>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_item_track_title"
-        android:text="Title" >
+        android:text="Title"
+        android:layout_alignTop="@+id/list_item_track_number"
+        android:layout_toRightOf="@+id/list_item_track_number"
+        android:layout_marginLeft="10dp">
     </TextView>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_item_track_time"
-        android:text="Duration" >
+        android:text="Duration"
+        android:layout_gravity="center_vertical|right"
+        android:layout_alignTop="@+id/list_item_track_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="#ffa7a7a7"
+        android:layout_marginRight="15dp">
 
     </TextView>
 
-</LinearLayout>
+</RelativeLayout>
