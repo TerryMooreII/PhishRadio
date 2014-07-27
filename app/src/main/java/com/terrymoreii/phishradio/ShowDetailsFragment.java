@@ -9,7 +9,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.terrymoreii.phishradio.model.PlayList;
-import com.terrymoreii.phishradio.model.Show;
 import com.terrymoreii.phishradio.model.ShowDetails;
 import com.terrymoreii.phishradio.model.Track;
 import com.terrymoreii.phishradio.model.Venue;
@@ -32,14 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.font.TextAttribute;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +95,13 @@ public class ShowDetailsFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().unregisterReceiver(receiver);
     }
 
     private ShowDetails parse(String jsonStr) {

@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.terrymoreii.phishradio.model.Show;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -1,34 +1,33 @@
 package com.terrymoreii.phishradio;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.KeyEvent;
 
-import com.terrymoreii.phishradio.model.ShowDetails;
 import com.terrymoreii.phishradio.model.Track;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ShowPlayer extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
 
+    private static final int NOTIFY_ID=1;
     private final String LOG_TAG = ShowPlayer.class.getSimpleName();
     private final IBinder musicBind = new MusicBinder();
+    private Track currentSong;
 
     private MediaPlayer player;
     //song list
@@ -84,7 +83,33 @@ public class ShowPlayer extends Service implements
 
     /** Called when MediaPlayer is ready */
     public void onPrepared(MediaPlayer player) {
+
         player.start();
+
+        //This show the current track being played in
+        //the notification tray.
+        // showNotification();
+    }
+
+    private void showNotification(){
+        Intent notIntent = new Intent(this, MyActivity.class);
+        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
+                notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Builder builder = new Notification.Builder(this);
+
+        Track currentSong = songs.get(songPosn);
+
+        builder.setContentIntent(pendInt)
+                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setTicker(currentSong.getTitle())
+                .setOngoing(true)
+                .setContentTitle("Playing...")
+        .setContentText(currentSong.getTitle());
+        Notification not = builder.build();
+
+        startForeground(NOTIFY_ID, not);
     }
 
     public void setSong(int songIndex){
@@ -102,9 +127,9 @@ public class ShowPlayer extends Service implements
     public void playSong(){
         player.reset();
         //get song
-        Track playSong = songs.get(songPosn);
+        currentSong = songs.get(songPosn);
         //get id
-        String url = playSong.getMp3();
+        String url = currentSong.getMp3();
 
         try{
             player.setDataSource(url);
@@ -113,6 +138,15 @@ public class ShowPlayer extends Service implements
             Log.e("MUSIC SERVICE", "Error setting data source", e);
         }
         player.prepareAsync();
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(NowPlayingFragment.TrackChangeReceiver.ACTION_RESP);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        sendBroadcast(broadcastIntent);
+    }
+
+    public Track getCurrentSong(){
+        return this.currentSong;
     }
 
     @Override
@@ -122,8 +156,8 @@ public class ShowPlayer extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent){
-        player.stop();
-        player.release();
+//        player.stop();
+//        player.release();
         return false;
     }
 
@@ -132,7 +166,14 @@ public class ShowPlayer extends Service implements
         if (songPosn < songs.size()){
             songPosn++;
             playSong();
+        }else{
+            player.stop();
+            player.release();
         }
+    }
+
+    public int getCurrentPosition(){
+        return player.getCurrentPosition();
     }
 
     @Override

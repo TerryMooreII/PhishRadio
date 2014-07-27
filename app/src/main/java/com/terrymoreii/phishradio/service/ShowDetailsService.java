@@ -1,8 +1,8 @@
 package com.terrymoreii.phishradio.service;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 import com.terrymoreii.phishradio.DAO.PhishInDAO;
 import com.terrymoreii.phishradio.ShowDetailsFragment;
@@ -66,7 +66,6 @@ public class ShowDetailsService extends IntentService {
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             broadcastIntent.putExtra(SHOW_DETAILS_RESULT, json);
             sendBroadcast(broadcastIntent);
-
 
         }
     }

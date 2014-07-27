@@ -53,6 +53,11 @@
             android:name=".service.ShowDetailsService"
             android:exported="false" >
         </service>
+
+        <service
+            android:name=".service.ShowsService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
