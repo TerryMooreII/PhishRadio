@@ -5,6 +5,7 @@ package com.terrymoreii.phishradio;
  */
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,13 +52,10 @@ public class ShowDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_show_details, container, false);
-
-        Intent intent = getActivity().getIntent();
         int id = 0;
 
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            id = intent.getIntExtra(Intent.EXTRA_TEXT, 3);
-        }
+        Bundle bundle = this.getArguments();
+        id = bundle.getInt(Intent.EXTRA_TEXT);
 
         Intent showDetailsService = new Intent(getActivity(), ShowDetailsService.class)
                 .putExtra(ShowDetailsService.SHOW_ID, id + "");
@@ -83,14 +81,22 @@ public class ShowDetailsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Track track = tracksAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
-                Bundle mBundle = new Bundle();
+
+                 Bundle bundle = new Bundle();
                 PlayList playList = new PlayList();
                 playList.setShowDetails(showDetails);
                 playList.setCurrentPosition(position);
-                mBundle.putSerializable("PlayList",playList);
-                intent.putExtras(mBundle);
-                startActivity(intent);
+                bundle.putSerializable("PlayList",playList);
+
+                Fragment newFragment = new NowPlayingFragment();
+                newFragment.setArguments(bundle);
+
+                FragmentTransaction transaction = getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, newFragment)
+                        .addToBackStack(null);
+                transaction.commit();
+
             }
         });
 

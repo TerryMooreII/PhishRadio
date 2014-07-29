@@ -1,6 +1,7 @@
 package com.terrymoreii.phishradio;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,10 +42,19 @@ public class YearsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String year = adapter.getItem(position).toString();
-                //Toast.makeText(getActivity(), year, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), ShowsActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, year);
-                startActivity(intent);
+
+                // Create new fragment and transaction
+                Bundle bundle = new Bundle();
+                bundle.putString(Intent.EXTRA_TEXT, year);
+
+                Fragment newFragment = new ShowsFragment();
+                newFragment.setArguments(bundle);
+
+                FragmentTransaction transaction = getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, newFragment)
+                        .addToBackStack(null);
+                transaction.commit();
             }
         });
 

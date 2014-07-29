@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:gravity="center_vertical"
-    >
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/list_item_show_date_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Date" />
+
     <TextView
         android:id="@+id/list_item_show_venueName_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Venue"
-        android:layout_marginLeft="40pt"/>
+        android:layout_marginLeft="40pt" />
 
 </RelativeLayout>

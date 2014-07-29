@@ -1,6 +1,7 @@
 package com.terrymoreii.phishradio;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,13 +42,11 @@ public class ShowsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Intent intent = getActivity().getIntent();
         View rootView = inflater.inflate(R.layout.fragment_shows, container, false);
         String year = "2014";
 
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-             year = intent.getStringExtra(Intent.EXTRA_TEXT);
-        }
+        Bundle bundle = this.getArguments();
+        year = bundle.getString(Intent.EXTRA_TEXT);
 
         Intent showsService = new Intent(getActivity(), ShowsService.class)
                 .putExtra(ShowsService.YEAR, year);
@@ -68,9 +67,19 @@ public class ShowsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Show show = showsAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), ShowDetailsActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, show.getId());
-                startActivity(intent);
+
+                // Create new fragment and transaction
+                Bundle bundle = new Bundle();
+                bundle.putInt(Intent.EXTRA_TEXT, show.getId());
+
+                Fragment newFragment = new ShowDetailsFragment();
+                newFragment.setArguments(bundle);
+
+                FragmentTransaction transaction = getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, newFragment)
+                        .addToBackStack(null);
+                transaction.commit();
             }
         });
 

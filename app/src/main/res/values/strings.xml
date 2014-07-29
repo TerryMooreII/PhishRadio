@@ -7,5 +7,12 @@
     <string name="title_activity_shows">Shows</string>
     <string name="title_activity_show_details">Show Details</string>
     <string name="title_activity_now_playing">Now Playing</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_section1">Now Playing</string>
+    <string name="title_section2">Years</string>
+    <string name="title_section3">Random</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
 
 </resources>

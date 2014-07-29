@@ -16,13 +16,14 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.terrymoreii.phishradio.model.PlayList;
 import com.terrymoreii.phishradio.model.Track;
 
 import java.util.List;
 
 public class ShowPlayer extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-        MediaPlayer.OnCompletionListener {
+        MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener {
 
     private static final int NOTIFY_ID=1;
     private final String LOG_TAG = ShowPlayer.class.getSimpleName();
@@ -34,6 +35,8 @@ public class ShowPlayer extends Service implements
     private List<Track> songs;
     //current position
     private int songPosn;
+    private boolean isPaused;
+    private int bufferPercentage;
 
     private static final String ACTION_PLAY = "com.example.action.PLAY";
 
@@ -117,14 +120,23 @@ public class ShowPlayer extends Service implements
     }
 
     public void pause(){
+
         player.pause();
+        isPaused = true;
     }
 
     public void play(){
+
         player.start();
+        isPaused = false;
     }
 
     public void playSong(){
+        if (player == null)
+            Log.d(LOG_TAG, "player is null");
+        else
+            Log.d(LOG_TAG, "player is not null");
+
         player.reset();
         //get song
         currentSong = songs.get(songPosn);
@@ -139,10 +151,10 @@ public class ShowPlayer extends Service implements
         }
         player.prepareAsync();
 
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(NowPlayingFragment.TrackChangeReceiver.ACTION_RESP);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        sendBroadcast(broadcastIntent);
+//        Intent broadcastIntent = new Intent();
+//        broadcastIntent.setAction(NowPlayingFragment.TrackChangeReceiver.ACTION_RESP);
+//        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+//        sendBroadcast(broadcastIntent);
     }
 
     public Track getCurrentSong(){
@@ -163,6 +175,11 @@ public class ShowPlayer extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+        if(songs == null) {
+            //player.release();
+            return;
+        }
+
         if (songPosn < songs.size()){
             songPosn++;
             playSong();
@@ -174,6 +191,23 @@ public class ShowPlayer extends Service implements
 
     public int getCurrentPosition(){
         return player.getCurrentPosition();
+    }
+
+    public boolean isPaused(){
+        return isPaused;
+    }
+
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        setBufferPercentage(percent * currentSong.getDuration() / 100);
+    }
+
+    public int getBufferPercentage() {
+        return bufferPercentage;
+    }
+
+    public void setBufferPercentage(int bufferPercentage) {
+        this.bufferPercentage = bufferPercentage;
     }
 
     @Override
